@@ -1,3 +1,5 @@
+
+
 KSET_DEFAULT_KUBECONFIG=$HOME/.kube/config
 KSET_KUBECONFIG_DIR="$HOME/.kube/configs/"
 KSET_COMPLETION_TOOLS="kubectl oc velero tkn helm kn"
@@ -12,7 +14,7 @@ kon() {
    local _KUBECONFIG
    if [ "$KUBECONFIG" == "$KSET_KUBECONFIG" ]; then
    	echo "Already on" >&2
-   else
+   else  
 	if [ -z ${KUBECONFIG+x} ]; then
                 unset KSET_PREV_KUBECONFIG
         else
@@ -20,7 +22,7 @@ kon() {
         fi
    	_KUBECONFIG="${KUBECONFIG:-$KSET_DEFAULT_KUBECONFIG}"
    	mkdir -p $KSET_KUBECONFIG_DIR
-   	cp $_KUBECONFIG $KSET_KUBECONFIG
+        kubectl config view --raw >$KSET_KUBECONFIG
    	export KUBECONFIG=$KSET_KUBECONFIG
    fi
    if hash kubeon 2>/dev/null; then
@@ -31,7 +33,7 @@ kon() {
 koff() {
    if [ "$KUBECONFIG" != "$KSET_KUBECONFIG" ]; then
 	echo "Already off" >&2
-   else
+   else 
    	if hash kubeoff 2>/dev/null; then
    		kubeoff
    	fi
@@ -50,7 +52,7 @@ for cmd in velero $KSET_COMPLETION_TOOLS
 do
         if hash $cmd  2>/dev/null
         then
-		source <($cmd completion bash)
+		source <($cmd completion bash) 
         fi
 done
 
