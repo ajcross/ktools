@@ -2,7 +2,7 @@
 
 KSET_DEFAULT_KUBECONFIG=$HOME/.kube/config
 KSET_KUBECONFIG_DIR="$HOME/.kube/configs/"
-KSET_COMPLETION_TOOLS="kubectl oc velero tkn helm kn"
+KSET_COMPLETION_TOOLS="kubectl oc velero tkn helm kn kustomize"
 KSET_KUBECONFIG=${KSET_KUBECONFIG_DIR}/config.$$
 
 kset_logout() {
@@ -22,7 +22,7 @@ kon() {
         fi
    	_KUBECONFIG="${KUBECONFIG:-$KSET_DEFAULT_KUBECONFIG}"
    	mkdir -p $KSET_KUBECONFIG_DIR
-        kubectl config view --raw >$KSET_KUBECONFIG
+        ( umask 066 && kubectl config view --raw >$KSET_KUBECONFIG )
    	export KUBECONFIG=$KSET_KUBECONFIG
    fi
    if hash kubeon 2>/dev/null; then
